@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="easiano, digital piano, piano keyboards, computer piano,电脑钢琴，键盘钢琴，电子琴，beginner，钢琴初学者">
+    <title>JS Keyboard</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+
+<body>
+    <div class="keys">
+        <!-- shift the octave -->
+        <div data-key="16" class="shift">
+            <kbd>shift</kbd>
+            <span class="octave">change octave</span>
+        </div>
+        <!-- DO -->
+        <div data-key="67" class="key">
+            <kbd>C</kbd>
+            <span class="sound">do</span>
+        </div>
+        <!-- RI -->
+        <div data-key="68" class="key">
+            <kbd>D</kbd>
+            <span class="sound">ri</span>
+        </div>
+        <!-- ME -->
+        <div data-key="69" class="key">
+            <kbd>E</kbd>
+            <span class="sound">me</span>
+        </div>
+        <!-- FA -->
+        <div data-key="70" class="key">
+            <kbd>F</kbd>
+            <span class="sound">fa</span>
+        </div>
+        <!-- SO -->
+        <div data-key="71" class="key">
+            <kbd>G</kbd>
+            <span class="sound">so</span>
+        </div>
+        <!-- LA -->
+        <div data-key="65" class="key">
+            <kbd>A</kbd>
+            <span class="sound">la</span>
+        </div>
+        <!-- TI -->
+        <div data-key="66" class="key">
+            <kbd>B</kbd>
+            <span class="sound">ti</span>
+        </div>
+        <footer>
+            <!-- Copyright -->
+            <div style="text-align: center;color:white">© 2018 Copyright:
+                <a target="_blank" href="https://www.linkedin.com/in/huiyi-riley-zhou-18b10414a/" style="text-decoration: none;color:white"> EASIANO</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+    </div>
+      
+    <!-- Audio clips -->
+    <audio data-key="67" src="sounds/67.mp3"></audio>
+    <audio data-key="68" src="sounds/68.mp3"></audio>
+    <audio data-key="69" src="sounds/69.mp3"></audio>
+    <audio data-key="70" src="sounds/70.mp3"></audio>
+    <audio data-key="71" src="sounds/71.mp3"></audio>
+    <audio data-key="65" src="sounds/65.mp3"></audio>
+    <audio data-key="66" src="sounds/66.mp3"></audio>
+
+    <audio data-key="74" src="sounds/74.mp3"></audio>
+    <audio data-key="75" src="sounds/75.mp3"></audio>
+    <audio data-key="76" src="sounds/76.mp3"></audio>
+    <audio data-key="77" src="sounds/77.mp3"></audio>
+    <audio data-key="78" src="sounds/78.mp3"></audio>
+    <audio data-key="72" src="sounds/72.mp3"></audio>
+    <audio data-key="73" src="sounds/73.mp3"></audio>
+
+    <script>
+        // Determine the scale
+        var interval = 0;
+
+        // Press to play audio
+        function playAudio(e){
+            const shift = document.querySelector(`.shift[data-key="${e.keyCode}"]`);
+            if(shift && interval==0) {//shift up
+                interval+=7;
+                shift.classList.add('playing');
+            }
+            else if(shift){//shift down
+                interval=0;
+                shift.classList.add('playing');
+            } 
+            const audio = document.querySelector(`audio[data-key="${e.keyCode+interval}"]`);
+            const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+            if(!audio) return;
+            audio.currentTime=0;
+            audio.play();
+            key.classList.add('playing');//pop up action
+        }
+
+        //remove the pop-up effect
+        function removeTransition(e){
+            if(e.propertyName!=='transform') return;
+            this.classList.remove('playing');
+        }
+
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key=>key.addEventListener('transitionend',removeTransition));
+        const rmShift = document.querySelector('.shift');
+        rmShift.addEventListener('transitionend',removeTransition);
+        window.addEventListener('keydown',playAudio);
+        
+    </script>
+
+</body>
